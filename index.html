@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Failure</title>
+    <style>
+        body {
+            background-color: black;
+            color: #00FF00; /* لون أخضر Matrix */
+            font-family: 'Courier New', Courier, monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            flex-direction: column;
+        }
+
+        #overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: black;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            cursor: pointer;
+        }
+
+        .matrix-text {
+            font-size: 2rem;
+            text-align: center;
+            display: none; /* مخفي في البداية */
+            text-shadow: 0 0 8px #00FF00;
+        }
+
+        .click-anywhere {
+            color: #333;
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="overlay">
+        <p class="click-anywhere">Checking System Security... [Click to scan]</p>
+    </div>
+
+    <div id="content" class="matrix-text">
+        ALL YOUR PHONES HAVE BEEN HACKED.<br>
+        MORIARTY WAS HERE.
+    </div>
+
+    <audio id="bg-music" loop>
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-15.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        const overlay = document.getElementById('overlay');
+        const content = document.getElementById('content');
+        const music = document.getElementById('bg-music');
+
+        overlay.addEventListener('click', () => {
+            overlay.style.display = 'none'; // إخفاء طبقة البداية
+            music.play(); // تشغيل الموسيقى الهادئة
+            
+            // الانتظار 4 ثوانٍ ثم ظهور النص والصوت المرعب
+            setTimeout(() => {
+                content.style.display = 'block';
+                speakText();
+            }, 4000);
+        });
+
+        function speakText() {
+            const msg = new SpeechSynthesisUtterance();
+            msg.text = "ALL YOUR PHONES HAVE BEEN HACKED. MORIARTY WAS HERE.";
+            msg.lang = 'en-US';
+            
+            // اختيار صوت غليظ
+            const voices = window.speechSynthesis.getVoices();
+            // البحث عن صوت رجالي غليظ (غالباً يكون اسمه Google US English أو Microsoft David)
+            msg.voice = voices.find(voice => voice.name.includes('Male')) || voices[0];
+            
+            msg.pitch = 0.1; // جعل الصوت غليظ جداً
+            msg.rate = 0.8;  // جعل السرعة بطيئة لزيادة الرعب
+            
+            window.speechSynthesis.speak(msg);
+        }
+
+        // لضمان تحميل الأصوات في بعض المتصفحات
+        window.speechSynthesis.onvoiceschanged = () => {};
+    </script>
+</body>
+</html>
